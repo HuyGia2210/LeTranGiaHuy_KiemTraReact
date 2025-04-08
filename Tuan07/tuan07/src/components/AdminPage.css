@@ -26,15 +26,27 @@ table.dataTable {
     padding: 0.5rem 0.75rem ;
     text-align: left ;
   }
+
+  table.dataTable td.dt-type-numeric.dt-type-numeric{
+    text-align: right;
+  }
   
   /* header */
-  table.dataTable thead {
+  table.dataTable thead tr{
     overflow: hidden;
     background-color: #f9fafb ;
     font-weight: bold ;
     color: rgb(108, 108, 108);
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
+  }
+
+  .dt-column-title.dt-column-title.dt-column-title.dt-column-title.dt-column-title.dt-column-title{
+    text-align: center;
+  }
+
+  table.dataTable thead tr th{
+    text-align: center;
   }
 
   table.dataTable tbody tr{
@@ -135,4 +147,6 @@ div.dt-container .dt-paging .dt-paging-button:hover:hover {
 .btn-edit{
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-left: 15%;
 }
