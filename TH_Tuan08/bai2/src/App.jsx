@@ -15,6 +15,7 @@ function App() {
       <RecipesSection></RecipesSection>
       <RecipesWithVideos></RecipesWithVideos>
       <EditorsPick></EditorsPick>
+      <Footer></Footer>
       {/* Phần nội dung khác */}
     </>
   );
