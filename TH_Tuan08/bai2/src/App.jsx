@@ -1,6 +1,10 @@
 import './App.css'
 import Header from './Header.jsx';
 import Hero from './Hero.jsx';
+import RecipesSection from './Recipe.jsx';
+import RecipesWithVideos from './RecipesWithVideos.jsx';
+import EditorsPick from './EditorsPick.jsx';
+import Footer from './Footer.jsx';
 
 function App() {
 
@@ -8,6 +12,9 @@ function App() {
     <>
       <Header />
       <Hero></Hero>
+      <RecipesSection></RecipesSection>
+      <RecipesWithVideos></RecipesWithVideos>
+      <EditorsPick></EditorsPick>
       {/* Phần nội dung khác */}
     </>
   );
