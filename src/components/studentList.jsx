@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [students, setStudents] = useState([
-    { id: 1, name: 'Nguyễn Văn A', class: '12A1', age: 18 },
-    { id: 2, name: 'Trần Thị B', class: '12A2', age: 17 },
-    { id: 3, name: 'Lê Văn C', class: '12A1', age: 18 },
-  ]);
+  // 1) Khởi tạo students từ localStorage (nếu có), ngược lại dùng mảng mặc định
+  const [students, setStudents] = useState(() => {
+    const saved = localStorage.getItem('students');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, name: 'Nguyễn Văn A', class: '12A1', age: 18 },
+      { id: 2, name: 'Trần Thị B', class: '12A2', age: 17 },
+      { id: 3, name: 'Lê Văn C', class: '12A1', age: 18 },
+    ];
+  });
 
-  // States cho form thêm
+  // các state khác (thêm, edit, search, filter) giữ nguyên
   const [name, setName] = useState('');
   const [studentClass, setStudentClass] = useState('');
   const [age, setAge] = useState('');
-
-  // States cho edit
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
   const [editClass, setEditClass] = useState('');
   const [editAge, setEditAge] = useState('');
-
-  // State cho search và lọc
   const [searchTerm, setSearchTerm] = useState('');
   const [filterClass, setFilterClass] = useState('All');
+
+  // 2) useEffect để lưu students vào localStorage mỗi khi students thay đổi
+  useEffect(() => {
+    localStorage.setItem('students', JSON.stringify(students));
+  }, [students]);
 
   const handleAddStudent = () => {
     if (!name || !studentClass || !age) {
@@ -68,10 +73,8 @@ function App() {
     setEditingId(null);
   };
 
-  // Lấy danh sách lớp duy nhất từ students
   const classOptions = ['All', ...Array.from(new Set(students.map(s => s.class)))];
 
-  // Lọc theo searchTerm và filterClass
   const filteredStudents = students
     .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter(s => filterClass === 'All' ? true : s.class === filterClass);
