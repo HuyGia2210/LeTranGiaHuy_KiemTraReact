@@ -1,53 +1,72 @@
-import React from 'react';
+import React from 'react'
 
 export default function StudentItem({
-  student,
-  isEditing,
+  student, isEditing,
   editName, editClass, editAge,
-  onStartEdit,
-  onChangeEditName, onChangeEditClass, onChangeEditAge,
-  onSaveEdit, onCancelEdit,
-  onDelete
+  onStartEdit, onChangeEditName, onChangeEditClass, onChangeEditAge,
+  onSaveEdit, onCancelEdit, onDelete
 }) {
   return (
-    <tr>
+    <tr className="border-b hover:bg-gray-50">
       {isEditing ? (
         <>
-          <td>
+          <td className="px-4 py-2">
             <input
+              className="border rounded w-full px-2 py-1"
               value={editName}
               onChange={e => onChangeEditName(e.target.value)}
             />
           </td>
-          <td>
+          <td className="px-4 py-2">
             <input
+              className="border rounded w-full px-2 py-1"
               value={editClass}
               onChange={e => onChangeEditClass(e.target.value)}
             />
           </td>
-          <td>
+          <td className="px-4 py-2">
             <input
-              type="number"
-              value={editAge}
+              className="border rounded w-full px-2 py-1"
+              type="number" value={editAge}
               onChange={e => onChangeEditAge(e.target.value)}
             />
           </td>
-          <td>
-            <button onClick={() => onSaveEdit(student.id)}>Lưu</button>
-            <button onClick={onCancelEdit}>Huỷ</button>
+          <td className="px-4 py-2 flex gap-2">
+            <button
+              className="bg-green-500 text-white rounded px-3 py-1 hover:bg-green-600"
+              onClick={() => onSaveEdit(student.id)}
+            >
+              Lưu
+            </button>
+            <button
+              className="bg-gray-300 rounded px-3 py-1 hover:bg-gray-400"
+              onClick={onCancelEdit}
+            >
+              Huỷ
+            </button>
           </td>
         </>
       ) : (
         <>
-          <td>{student.name}</td>
-          <td>{student.class}</td>
-          <td>{student.age}</td>
-          <td>
-            <button onClick={() => onStartEdit(student)}>Sửa</button>
-            <button onClick={() => onDelete(student.id)}>Xoá</button>
+          <td className="px-4 py-2">{student.name}</td>
+          <td className="px-4 py-2">{student.class}</td>
+          <td className="px-4 py-2">{student.age}</td>
+          <td className="px-4 py-2 flex gap-4">
+            <button
+              className="text-blue-500 hover:underline"
+              onClick={() => onStartEdit(student)}
+            >
+              Sửa
+            </button>
+            <button
+              className="text-red-500 hover:underline"
+              onClick={() => onDelete(student.id)}
+            >
+              Xoá
+            </button>
           </td>
         </>
       )}
     </tr>
-  );
+  )
 }
