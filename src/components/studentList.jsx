@@ -32,6 +32,11 @@ export default function StudentList(){
     setAge('');
   };
 
+  const handleDeleteStudent = (id) => {
+    // Lọc bỏ sinh viên có id bằng id được truyền vào
+    setStudents(students.filter(student => student.id !== id));
+  };
+
   return (
     <div className="container">
       <h1>Danh sách sinh viên</h1>
@@ -74,7 +79,9 @@ export default function StudentList(){
               <td>{student.class}</td>
               <td>{student.age}</td>
               <td>
-                <button className='text-red-500'>Xoá</button>
+                <button className='text-red-500' onClick={() => handleDeleteStudent(student.id)}>
+                  Xoá
+                </button>
               </td>
             </tr>
           ))}
