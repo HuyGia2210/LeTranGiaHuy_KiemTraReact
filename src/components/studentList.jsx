@@ -11,6 +11,12 @@ export default function StudentList(){
   const [studentClass, setStudentClass] = useState('');
   const [age, setAge] = useState('');
 
+  // States cho edit
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editClass, setEditClass] = useState('');
+  const [editAge, setEditAge] = useState('');
+
   const handleAddStudent = () => {
     if (!name || !studentClass || !age) {
       alert("Vui lòng nhập đầy đủ thông tin.");
@@ -37,6 +43,30 @@ export default function StudentList(){
     setStudents(students.filter(student => student.id !== id));
   };
 
+  const startEdit = (student) => {
+    setEditingId(student.id);
+    setEditName(student.name);
+    setEditClass(student.class);
+    setEditAge(student.age.toString());
+  };
+
+  const handleSaveEdit = (id) => {
+    if (!editName || !editClass || !editAge) {
+      alert("Vui lòng nhập đầy đủ thông tin.");
+      return;
+    }
+    setStudents(students.map(s =>
+      s.id === id
+        ? { ...s, name: editName, class: editClass, age: parseInt(editAge) }
+        : s
+    ));
+    setEditingId(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
   return (
     <div className="container">
       <h1>Danh sách sinh viên</h1>
@@ -46,23 +76,23 @@ export default function StudentList(){
         <input
           placeholder="Họ tên"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
         <input
           placeholder="Lớp"
           value={studentClass}
-          onChange={(e) => setStudentClass(e.target.value)}
+          onChange={e => setStudentClass(e.target.value)}
         />
         <input
           placeholder="Tuổi"
           type="number"
           value={age}
-          onChange={(e) => setAge(e.target.value)}
+          onChange={e => setAge(e.target.value)}
         />
         <button onClick={handleAddStudent}>Thêm sinh viên</button>
       </div>
 
-      {/* Danh sách */}
+      {/* Bảng danh sách */}
       <table border="1" cellPadding="8">
         <thead>
           <tr>
@@ -73,16 +103,45 @@ export default function StudentList(){
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
+          {students.map(student => (
             <tr key={student.id}>
-              <td>{student.name}</td>
-              <td>{student.class}</td>
-              <td>{student.age}</td>
-              <td>
-                <button className='text-red-500' onClick={() => handleDeleteStudent(student.id)}>
-                  Xoá
-                </button>
-              </td>
+              {editingId === student.id ? (
+                <>
+                  <td>
+                    <input
+                      value={editName}
+                      onChange={e => setEditName(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      value={editClass}
+                      onChange={e => setEditClass(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={editAge}
+                      onChange={e => setEditAge(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => handleSaveEdit(student.id)}>Lưu</button>
+                    <button onClick={handleCancelEdit}>Huỷ</button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td>{student.name}</td>
+                  <td>{student.class}</td>
+                  <td>{student.age}</td>
+                  <td>
+                    <button className='text-blue-500' onClick={() => startEdit(student)}>Sửa</button>
+                    <button className='text-red-500' onClick={() => handleDeleteStudent(student.id)}>Xoá</button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
