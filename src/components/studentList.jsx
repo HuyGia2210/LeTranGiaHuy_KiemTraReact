@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
-export default function StudentList(){
-    const [students, setStudents] = useState([
-        { id: 1, name: 'Nguyễn Văn A', class: '12A1', age: 18 },
-        { id: 2, name: 'Trần Thị B', class: '12A2', age: 17 },
-        { id: 3, name: 'Lê Văn C', class: '12A1', age: 18 },
-      ]);
+function App() {
+  const [students, setStudents] = useState([
+    { id: 1, name: 'Nguyễn Văn A', class: '12A1', age: 18 },
+    { id: 2, name: 'Trần Thị B', class: '12A2', age: 17 },
+    { id: 3, name: 'Lê Văn C', class: '12A1', age: 18 },
+  ]);
 
-    const [name, setName] = useState('');
+  // States cho form thêm
+  const [name, setName] = useState('');
   const [studentClass, setStudentClass] = useState('');
   const [age, setAge] = useState('');
 
@@ -17,33 +18,30 @@ export default function StudentList(){
   const [editClass, setEditClass] = useState('');
   const [editAge, setEditAge] = useState('');
 
-  //states de search
+  // State cho search và lọc
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterClass, setFilterClass] = useState('All');
 
   const handleAddStudent = () => {
     if (!name || !studentClass || !age) {
       alert("Vui lòng nhập đầy đủ thông tin.");
       return;
     }
-
     const newStudent = {
-      id: Date.now(), // đảm bảo id duy nhất
+      id: Date.now(),
       name,
       class: studentClass,
       age: parseInt(age)
     };
-
     setStudents([...students, newStudent]);
-
-    // Reset input
     setName('');
     setStudentClass('');
     setAge('');
   };
 
   const handleDeleteStudent = (id) => {
-    // Lọc bỏ sinh viên có id bằng id được truyền vào
-    setStudents(students.filter(student => student.id !== id));
+    setStudents(students.filter(s => s.id !== id));
+    if (editingId === id) setEditingId(null);
   };
 
   const startEdit = (student) => {
@@ -70,9 +68,13 @@ export default function StudentList(){
     setEditingId(null);
   };
 
-  const filteredStudents = students.filter(s =>
-    s.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Lấy danh sách lớp duy nhất từ students
+  const classOptions = ['All', ...Array.from(new Set(students.map(s => s.class)))];
+
+  // Lọc theo searchTerm và filterClass
+  const filteredStudents = students
+    .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(s => filterClass === 'All' ? true : s.class === filterClass);
 
   return (
     <div className="container">
@@ -99,13 +101,24 @@ export default function StudentList(){
         <button onClick={handleAddStudent}>Thêm sinh viên</button>
       </div>
 
-      {/* Search */}
+      {/* Search và Lọc lớp */}
       <div style={{ marginBottom: '20px' }}>
         <input
           placeholder="Tìm kiếm theo tên..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
+          style={{ marginRight: '8px' }}
         />
+        <select
+          value={filterClass}
+          onChange={e => setFilterClass(e.target.value)}
+        >
+          {classOptions.map(cls => (
+            <option key={cls} value={cls}>
+              {cls === 'All' ? 'Tất cả lớp' : cls}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Bảng danh sách */}
@@ -165,3 +178,5 @@ export default function StudentList(){
     </div>
   );
 }
+
+export default App;
