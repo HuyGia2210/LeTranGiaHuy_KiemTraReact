@@ -17,6 +17,9 @@ export default function StudentList(){
   const [editClass, setEditClass] = useState('');
   const [editAge, setEditAge] = useState('');
 
+  //states de search
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleAddStudent = () => {
     if (!name || !studentClass || !age) {
       alert("Vui lòng nhập đầy đủ thông tin.");
@@ -67,6 +70,10 @@ export default function StudentList(){
     setEditingId(null);
   };
 
+  const filteredStudents = students.filter(s =>
+    s.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container">
       <h1>Danh sách sinh viên</h1>
@@ -92,6 +99,15 @@ export default function StudentList(){
         <button onClick={handleAddStudent}>Thêm sinh viên</button>
       </div>
 
+      {/* Search */}
+      <div style={{ marginBottom: '20px' }}>
+        <input
+          placeholder="Tìm kiếm theo tên..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {/* Bảng danh sách */}
       <table border="1" cellPadding="8">
         <thead>
@@ -103,7 +119,7 @@ export default function StudentList(){
           </tr>
         </thead>
         <tbody>
-          {students.map(student => (
+          {filteredStudents.map(student => (
             <tr key={student.id}>
               {editingId === student.id ? (
                 <>
@@ -137,8 +153,8 @@ export default function StudentList(){
                   <td>{student.class}</td>
                   <td>{student.age}</td>
                   <td>
-                    <button className='text-blue-500' onClick={() => startEdit(student)}>Sửa</button>
-                    <button className='text-red-500' onClick={() => handleDeleteStudent(student.id)}>Xoá</button>
+                    <button onClick={() => startEdit(student)}>Sửa</button>
+                    <button onClick={() => handleDeleteStudent(student.id)}>Xoá</button>
                   </td>
                 </>
               )}
